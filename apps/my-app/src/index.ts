@@ -10,7 +10,6 @@ app.get('/:username', async (c) => {
   const username = c.req.param("username")
   const cachedResponse = await c.env.CACHE.get(username,"json");
   if (cachedResponse) {
-    console.log(`cache hit for ${username}`)
     return c.json(cachedResponse);
   }
   const response = await fetch(`https://api.github.com/users/${username}/repos`, {
