@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import { z } from "zod";
 
 type Bindings = {
   CACHE : KVNamespace
@@ -8,6 +9,10 @@ const app = new Hono<{ Bindings: Bindings }>()
 
 app.get('/:username', async (c) => {
   const username = c.req.param("username")
+  const usernameValidation = z.string().nonempty().safeParse(username).success
+  if (usernameValidation === false) {
+    return c.json({error: "Invalid username"})
+  }
   const cachedResponse = await c.env.CACHE.get(username,"json");
   if (cachedResponse) {
     return c.json(cachedResponse);
