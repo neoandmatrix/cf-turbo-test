@@ -9,7 +9,7 @@ const app = new Hono<{ Bindings: Bindings }>();
 
 app.get("/:username", async (c) => {
   const username = c.req.param("username");
-  const usernameValidation = z.string();
+  const usernameValidation = z.number();
   if (usernameValidation.safeParse(username).success === false) {
     return c.json({ error: "Invalid username" });
   } else {
