@@ -16,8 +16,9 @@ id = "3c2e7fd87aea4d189348344e7c1aa3e1"
 
 # [[d1_databases]]
 # binding = "DB"
-# database_name = "my-database"
-# database_id = ""
+# database_name = "cloudflare-pain-db"
+# database_id = "8ba6aa3b-dae6-49fc-a749-1ae6c6050a84"
+# migrations_dir = "drizzle"
 
 # [ai]
 # binding = "AI"

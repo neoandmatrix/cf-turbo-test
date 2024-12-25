@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { notFound } from "stoker/middlewares";
 import { z } from "zod";
 
 type Bindings = {
@@ -30,5 +31,7 @@ app.get("/:username", async (c) => {
     return c.json(data);
   }
 });
+
+app.notFound(notFound);
 
 export default app;
