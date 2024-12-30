@@ -13,6 +13,7 @@
     "@hono/zod-validator": "^0.4.2",
     "hono": "^4.6.11",
     "stoker": "^1.4.2",
+    "tslog": "^4.9.3",
     "zod": "^3.24.1"
   },
   "devDependencies": {

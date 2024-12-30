@@ -2,6 +2,7 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { notFound, onError } from "stoker/middlewares";
 import { z } from "zod";
+import { Logger } from "tslog";
 
 type Bindings = {
   CACHE: KVNamespace;
@@ -9,6 +10,7 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
+const logger = new Logger({ name: "myLogger" });
 
 app.get("/error", (c) => {
   c.status(422);
@@ -22,7 +24,7 @@ app.get("/github/:username",zValidator('param',usernameValidation) ,async (c) =>
   
   const cachedResponse = await c.env.CACHE.get(username, "json");
   if (cachedResponse) {
-    console.log({ stauts : "success" });
+    logger.info("I am an info log.");
     return c.json(cachedResponse);
   }
   console.log({action : "fetching from github"});
