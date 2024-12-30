@@ -24,7 +24,8 @@ app.get("/github/:username",zValidator('param',usernameValidation) ,async (c) =>
   
   const cachedResponse = await c.env.CACHE.get(username, "json");
   if (cachedResponse) {
-    logger.info("I am an info log.");
+
+    console.log("\x1b[31mAUTH_SECRET already exists in .dev.vars\x1b[0m");
     return c.json(cachedResponse);
   }
   console.log({action : "fetching from github"});
