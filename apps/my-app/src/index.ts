@@ -1,5 +1,6 @@
+import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { notFound } from "stoker/middlewares";
+import { notFound, onError } from "stoker/middlewares";
 import { z } from "zod";
 
 type Bindings = {
@@ -8,16 +9,27 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.get("/:username", async (c) => {
+
+app.get("/error", (c) => {
+  c.status(422);
+  throw new Error("This is an error");
+})
+
+const usernameValidation = z.string();
+
+app.get("/github/:username",zValidator('param',usernameValidation) ,async (c) => {
   const username = c.req.param("username");
-  const usernameValidation = z.string();
+  
   if (usernameValidation.safeParse(username).success === false) {
+    console.log({ username });
     return c.json({ error: "Invalid username" });
   } else {
     const cachedResponse = await c.env.CACHE.get(username, "json");
     if (cachedResponse) {
+      console.log({ stauts : "success" });
       return c.json(cachedResponse);
     }
+    console.log({action : "fetching from github"});
     const response = await fetch(
       `https://api.github.com/users/${username}/repos`,
       {
@@ -32,6 +44,10 @@ app.get("/:username", async (c) => {
   }
 });
 
+
+
 app.notFound(notFound);
+
+app.onError(onError);
 
 export default app;
