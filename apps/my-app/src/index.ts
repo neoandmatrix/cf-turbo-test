@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { notFound, onError } from "stoker/middlewares";
 import { z } from "zod";
 import { Logger } from "tslog";
+import { logger } from 'hono/logger';
 
 type Bindings = {
   CACHE: KVNamespace;
@@ -10,7 +11,8 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-const logger = new Logger({ name: "myLogger" });
+app.use(logger())
+
 
 app.get("/error", (c) => {
   c.status(422);
