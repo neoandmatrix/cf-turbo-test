@@ -19,9 +19,13 @@ app.get("/error", (c) => {
   throw new Error("This is an error");
 })
 
-const usernameValidation = z.object({username : z.string()});
+const usernameValidation = z.object({
+  username: z.string().refine((val) => isNaN(Number(val)), {
+    message: "Username must be a non-numeric string",
+  }),
+});
 
-app.get("/github/:username",zValidator('param',usernameValidation) ,async (c) => {
+app.get("/github/:username", zValidator('param', usernameValidation), async (c) => {
   const username = c.req.param("username");
   
   const cachedResponse = await c.env.CACHE.get(username, "json");
